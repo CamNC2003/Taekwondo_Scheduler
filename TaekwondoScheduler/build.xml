@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+
+<project name="TaekwondoScheduler" basedir=".">
+
+	<property name="src.dir" value="${basedir}/src"/>
+	<property name="bin.dir" value="${basedir}/bin"/>
+	<property name="build.dir" value="${basedir}/build"/>
+	<property name="config.dir" value="${basedir}/config"/>
+	
+	<path id="classpath">
+	<pathelement location="${bin.dir}"/>
+	</path>
+	
+	<target name="clean" description="cleans build files">
+		<delete dir="${build.dir}"/>
+		<mkdir dir="${build.dir}"/>
+	</target>
+	
+	<target name="compile" depends="clean">
+		<javac srcdir="${src.dir}" destdir="${bin.dir}">
+			
+		</javac>
+	</target>
+	
+	<target name="buildjar" depends="compile">
+		<jar jarfile="${build.dir}/TaekwondoScheduler.jar">
+			<fileset dir="${basedir}">
+				<include name = "config/*"/>
+			</fileset>
+			<fileset dir="${bin.dir}">
+				<include name = "**/*.class"/>
+			</fileset>
+			<manifest>
+				<attribute name="Main-Class" 
+					value="com.taekwondoscheduler.view.mainview.MainUI"/>
+			</manifest>
+		</jar>
+		
+		<copy todir="${build.dir}">
+			<fileset dir="${basedir}">
+				<include name="config*/**/*"/>
+			</fileset>
+		</copy>
+		
+		<copy todir="${build.dir}">
+					<fileset dir="${basedir}">
+						<include name="persistence*/**/*"/>
+					</fileset>
+				</copy>
+		
+	</target>
+	
+	<target name="testjar" depends="buildjar">
+		<java jar="${build.dir}/TaekwondoScheduler.jar" fork="yes" dir="."></java>
+	</target>
+</project>
